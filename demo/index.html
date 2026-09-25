@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISRO Antariksh — Geo-Spatial Telemetry Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="isro-logo-badge">🚀</div>
+        <div>
+          <div class="brand-title">ISRO ANTARIKSH PORTAL</div>
+          <div class="brand-subtitle">Indian Space Research Organisation — Geo-Spatial Data Service</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <span class="status-indicator"><span class="dot"></span> Telemetry Gateway Live</span>
+        <a href="#docs" class="nav-link">API Specs</a>
+        <a href="#help" class="nav-link">Security Guidelines</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+    <div class="hero-banner">
+      <div class="banner-tag">SIH PROBLEM STATEMENT #26171 DEMO ENVIRONMENT</div>
+      <h1>Scientist & Developer Access Registration</h1>
+      <p>Subscribe to high-resolution multispectral imagery, NavIC ephemeris feeds, and atmospheric satellite telemetry.</p>
+    </div>
+
+    <div class="portal-grid">
+      <!-- Left Column: Registration & KYC Form -->
+      <section class="card form-section">
+        <div class="card-header">
+          <div class="step-badge">STAGE 01</div>
+          <h2>Authorized Researcher KYC Registration</h2>
+        </div>
+
+        <form id="isro-registration-form" onsubmit="handleFormSubmit(event)">
+          <!-- Personal Details -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullname">Full Legal Name</label>
+              <input type="text" id="fullname" name="fullname" placeholder="e.g. Dr. A. P. J. Kalam" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Official Email Address</label>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="researcher@isro.gov.in" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="mobile">Mobile Number (with +91)</label>
+              <input type="tel" id="mobile" name="mobile" autocomplete="tel" placeholder="+91 98765 43210" required />
+            </div>
+            <div class="form-group">
+              <label for="pan">Permanent Account Number (PAN)</label>
+              <input type="text" id="pan" name="pan" placeholder="ABCDE1234F" maxlength="10" required />
+            </div>
+          </div>
+
+          <!-- National ID -->
+          <div class="form-group">
+            <label for="aadhaar">Aadhaar Identification Number (12-Digit)</label>
+            <input type="text" id="aadhaar" name="aadhaar" placeholder="2938 4728 1934" maxlength="14" required />
+            <small class="field-hint">Shielded automatically by PRAHARI on-device visual engine</small>
+          </div>
+
+          <!-- Password & Auth -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Portal Password</label>
+              <input type="password" id="password" name="password" autocomplete="new-password" placeholder="••••••••••••" required />
+            </div>
+            <div class="form-group">
+              <label for="otp">2FA Security Token / OTP</label>
+              <input type="text" id="otp" name="otp" placeholder="849201" maxlength="6" />
+            </div>
+          </div>
+
+          <!-- Payment Section -->
+          <div class="divider">
+            <span>ANNUAL TELEMETRY ACCESS FEE (₹ 1,200 / YR)</span>
+          </div>
+
+          <div class="form-group">
+            <label for="card-number">Credit / Debit Card Number</label>
+            <input type="text" id="card-number" name="card-number" autocomplete="cc-number" placeholder="4532 8901 2345 6789" maxlength="19" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="card-expiry">Expiry Date</label>
+              <input type="text" id="card-expiry" name="card-expiry" autocomplete="cc-exp" placeholder="08/29" maxlength="5" />
+            </div>
+            <div class="form-group">
+              <label for="card-cvv">Security CVV</label>
+              <input type="password" id="card-cvv" name="card-cvv" autocomplete="cc-csc" placeholder="•••" maxlength="4" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="prefillDummyData()">
+              Prefill Test Data
+            </button>
+            <button type="submit" id="submit-btn" class="btn-primary">
+              Verify Credentials & Submit Application
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Right Column: Face Verification & Live Telemetry Stream -->
+      <aside class="sidebar-section">
+        <!-- Face ID Card -->
+        <div class="card face-card">
+          <div class="card-header">
+            <div class="step-badge cyan">STAGE 02</div>
+            <h3>Biometric Profile Verification</h3>
+          </div>
+          <div class="avatar-preview-box">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Researcher Profile Photo" class="user-avatar" id="profile-img" />
+            <div class="avatar-caption">
+              <strong>Dr. Ananya Sharma</strong><br/>
+              <span>Principal Investigator — Payload Dynamics</span>
+            </div>
+          </div>
+          <div class="shield-callout">
+            <span class="shield-icon">🛡️</span>
+            <div>
+              <strong>PRAHARI Face Protection</strong>
+              <p>Facial features and avatars are blurred locally via onnxruntime-web before cloud ingestion.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Architecture Status -->
+        <div class="card status-card">
+          <div class="card-header">
+            <h3>Active Satellite Links</h3>
+          </div>
+          <ul class="satellite-list">
+            <li>
+              <span class="sat-name">🛰️ Oceansat-3 (EOS-06)</span>
+              <span class="badge-active">Online</span>
+            </li>
+            <li>
+              <span class="sat-name">🛰️ Cartosat-3 (High-Res)</span>
+              <span class="badge-active">Online</span>
+            </li>
+            <li>
+              <span class="sat-name">🛰️ RISAT-1A (Radar)</span>
+              <span class="badge-active">Online</span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

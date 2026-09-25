@@ -16,7 +16,7 @@ function updateThemeLabel(theme) {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     toggle.setAttribute('aria-pressed', String(theme === 'dark'));
     toggle.setAttribute('aria-label', `Switch to ${nextTheme} theme`);
-    toggle.setAttribute('title', `Switch to ${nextTheme} theme`);
+    toggle.removeAttribute('title');
   }
 }
 

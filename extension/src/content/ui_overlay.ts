@@ -140,7 +140,9 @@ class UIOverlayManager {
 
       modal.innerHTML = `
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <div style="background:rgba(245, 158, 11, 0.12);color:#FBBF24;padding:6px 10px;border-radius:6px;font-size:16px;border:1px solid rgba(245,158,11,0.25);">⚠️</div>
+          <div style="background:rgba(245, 158, 11, 0.12);color:#FBBF24;padding:6px 8px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(245,158,11,0.25);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
           <div>
             <h3 style="margin:0;font-size:15px;font-weight:600;color:#F4F4F5;">Sentinel Action Authorization</h3>
             <span style="font-size:11.5px;color:#A1A1AA;">Critical browser event intercepted</span>

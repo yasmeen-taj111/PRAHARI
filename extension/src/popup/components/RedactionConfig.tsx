@@ -1,6 +1,6 @@
 import React from 'react';
 import { RedactionSettings } from '../../../../shared/types';
-import { Sliders, CheckSquare, Square } from 'lucide-react';
+import { Sliders, Check, Square } from 'lucide-react';
 
 interface Props {
   settings: RedactionSettings;
@@ -13,26 +13,33 @@ export const RedactionConfig: React.FC<Props> = ({ settings, onUpdate }) => {
   };
 
   const categories = [
-    { key: 'redactPasswords', label: 'Password Fields', color: '#EF4444' },
-    { key: 'redactCreditCards', label: 'Credit / Debit Cards', color: '#8B5CF6' },
-    { key: 'redactAadhaar', label: 'Indian Aadhaar (12-Digit)', color: '#EC4899' },
-    { key: 'redactPan', label: 'PAN Identity Numbers', color: '#06B6D4' },
-    { key: 'redactEmails', label: 'Email Addresses', color: '#3B82F6' },
-    { key: 'redactPhones', label: 'Phone Numbers (+91)', color: '#6366F1' },
-    { key: 'redactOtps', label: 'OTP / Security Codes', color: '#10B981' },
-    { key: 'redactFaces', label: 'Faces & Avatars', color: '#F59E0B' },
+    { key: 'redactPasswords', label: 'Passwords & Tokens' },
+    { key: 'redactCreditCards', label: 'Payment / Card Data' },
+    { key: 'redactAadhaar', label: 'Aadhaar (Verhoeff)' },
+    { key: 'redactPan', label: 'PAN Identity Numbers' },
+    { key: 'redactEmails', label: 'Email Addresses' },
+    { key: 'redactPhones', label: 'Phone Numbers (+91)' },
+    { key: 'redactOtps', label: 'OTP & 2FA Codes' },
+    { key: 'redactFaces', label: 'Facial Avatars' },
   ];
 
   return (
-    <div style={{ margin: '12px 16px', background: '#1E293B', border: '1px solid #334155', borderRadius: '10px', padding: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-        <Sliders size={13} color="#10B981" />
-        <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.06em', color: '#F1F5F9' }}>
-          LOCAL SHIELD POLICIES
+    <div style={{
+      margin: '10px 14px',
+      background: '#11141A',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '10px',
+      padding: '10px 12px',
+      boxShadow: '0 8px 24px -6px rgba(0, 0, 0, 0.45)',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+        <Sliders size={12} color="#71717A" />
+        <span style={{ fontSize: '10.5px', fontWeight: '600', color: '#D4D4D8', letterSpacing: '0.02em' }}>
+          Active Masking Policies
         </span>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-        {categories.map(({ key, label, color }) => {
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+        {categories.map(({ key, label }) => {
           const isEnabled = !!settings[key as keyof RedactionSettings];
           return (
             <button
@@ -41,20 +48,32 @@ export const RedactionConfig: React.FC<Props> = ({ settings, onUpdate }) => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                background: isEnabled ? 'rgba(16, 185, 129, 0.08)' : '#0F172A',
-                border: isEnabled ? '1px solid #10B981' : '1px solid #334155',
+                gap: '6px',
+                background: isEnabled ? 'rgba(16, 185, 129, 0.08)' : '#0D1016',
+                border: isEnabled ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(255, 255, 255, 0.06)',
                 borderRadius: '6px',
-                padding: '6px 10px',
-                color: isEnabled ? '#F1F5F9' : '#94A3B8',
-                fontSize: '11px',
+                padding: '5px 8px',
+                color: isEnabled ? '#F4F4F5' : '#71717A',
+                fontSize: '10.5px',
+                fontWeight: isEnabled ? '500' : '400',
                 textAlign: 'left',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
             >
-              {isEnabled ? <CheckSquare size={13} color="#10B981" /> : <Square size={13} color="#475569" />}
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: isEnabled ? '600' : '400' }}>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '3px',
+                background: isEnabled ? '#10B981' : 'rgba(255, 255, 255, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                {isEnabled && <Check size={9} color="#090B0E" strokeWidth={3} />}
+              </div>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {label}
               </span>
             </button>

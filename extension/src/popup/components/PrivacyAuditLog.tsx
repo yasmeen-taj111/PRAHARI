@@ -1,5 +1,5 @@
 import React from 'react';
-import { Terminal, Shield } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 
 interface AuditItem {
   timestamp: string;
@@ -14,17 +14,37 @@ interface Props {
 
 export const PrivacyAuditLog: React.FC<Props> = ({ logs }) => {
   return (
-    <div style={{ margin: '14px 16px', background: '#1E293B', border: '1px solid #334155', borderRadius: '10px', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: '#0F172A', borderBottom: '1px solid #334155' }}>
-        <Terminal size={12} color="#10B981" />
-        <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.06em', color: '#F1F5F9' }}>
-          SENTINEL PRIVACY AUDIT TRAIL
+    <div style={{
+      margin: '12px 14px',
+      background: '#11141A',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '10px',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '8px 12px',
+        background: '#0D1016',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+      }}>
+        <Terminal size={11} color="#71717A" />
+        <span style={{ fontSize: '10.5px', fontWeight: '600', color: '#D4D4D8', letterSpacing: '0.02em' }}>
+          Real-Time Privacy Audit Stream
         </span>
       </div>
-      <div style={{ maxHeight: '105px', overflowY: 'auto', padding: '8px 12px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', background: '#0F172A' }}>
+      <div style={{
+        maxHeight: '100px',
+        overflowY: 'auto',
+        padding: '8px 10px',
+        fontSize: '10.5px',
+        fontFamily: 'Geist Mono, monospace',
+        background: '#090B0E',
+      }}>
         {logs.length === 0 ? (
-          <div style={{ color: '#64748B', textAlign: 'center', padding: '10px 0', fontSize: '11px' }}>
-            Zero-Trust Shield Active • No PII leaks detected
+          <div style={{ color: '#52525B', textAlign: 'center', padding: '10px 0', fontSize: '10.5px' }}>
+            Zero-Trust buffer initialized • 0 PII bytes transmitted
           </div>
         ) : (
           logs.slice(0, 15).map((log, idx) => (
@@ -33,13 +53,13 @@ export const PrivacyAuditLog: React.FC<Props> = ({ logs }) => {
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '8px',
-                padding: '3px 0',
-                borderBottom: '1px solid rgba(51, 65, 85, 0.4)',
-                color: log.type === 'ERROR' ? '#EF4444' : log.type === 'REDACTION' ? '#10B981' : '#38BDF8',
+                gap: '6px',
+                padding: '2px 0',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.03)',
+                color: log.type === 'ERROR' ? '#FB7185' : log.type === 'REDACTION' ? '#34D399' : '#38BDF8',
               }}
             >
-              <span style={{ color: '#64748B', fontSize: '9px', whiteSpace: 'nowrap' }}>[{log.timestamp}]</span>
+              <span style={{ color: '#52525B', fontSize: '9px', whiteSpace: 'nowrap' }}>[{log.timestamp}]</span>
               <span style={{ flex: 1, wordBreak: 'break-word', fontSize: '10px' }}>{log.details}</span>
             </div>
           ))

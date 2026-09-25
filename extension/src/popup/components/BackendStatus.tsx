@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClientTelemetry } from '../../../../shared/types';
-import { Zap, Clock, ShieldCheck, Activity } from 'lucide-react';
+import { Zap, Clock, ShieldCheck } from 'lucide-react';
 
 interface Props {
   telemetry?: ClientTelemetry;
@@ -11,37 +11,57 @@ export const BackendStatus: React.FC<Props> = ({ telemetry, backend }) => {
   const isWebGPU = backend === 'webgpu';
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', margin: '0 16px' }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: '6px',
+      margin: '0 14px',
+    }}>
       {/* Acceleration */}
-      <div style={{ background: '#1E293B', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }}>
-          <Zap size={12} color="#10B981" />
-          <span style={{ fontSize: '9px', color: '#94A3B8', fontWeight: '600', letterSpacing: '0.04em' }}>ACCELERATION</span>
+      <div style={{
+        background: '#11141A',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '8px',
+        padding: '7px 9px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+          <Zap size={11} color="#10B981" />
+          <span style={{ fontSize: '9.5px', color: '#71717A', fontWeight: '500' }}>Engine Mode</span>
         </div>
-        <div style={{ fontSize: '11px', fontWeight: '700', color: '#10B981' }}>
-          {isWebGPU ? 'WebGPU HW' : 'WASM SIMD'}
-        </div>
-      </div>
-
-      {/* Local Perception Latency */}
-      <div style={{ background: '#1E293B', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }}>
-          <Clock size={12} color="#38BDF8" />
-          <span style={{ fontSize: '9px', color: '#94A3B8', fontWeight: '600', letterSpacing: '0.04em' }}>LOCAL LATENCY</span>
-        </div>
-        <div style={{ fontSize: '11px', fontWeight: '700', color: '#38BDF8', fontFamily: 'JetBrains Mono, monospace' }}>
-          {telemetry ? `${Math.round(telemetry.totalClientTimeMs)}ms` : '52ms'}
+        <div style={{ fontSize: '11px', fontWeight: '600', color: '#F4F4F5' }}>
+          {isWebGPU ? 'WebGPU Hardware' : 'WASM SIMD'}
         </div>
       </div>
 
-      {/* Shielded Elements */}
-      <div style={{ background: '#1E293B', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }}>
-          <ShieldCheck size={12} color="#8B5CF6" />
-          <span style={{ fontSize: '9px', color: '#94A3B8', fontWeight: '600', letterSpacing: '0.04em' }}>REDACTED</span>
+      {/* Latency */}
+      <div style={{
+        background: '#11141A',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '8px',
+        padding: '7px 9px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+          <Clock size={11} color="#38BDF8" />
+          <span style={{ fontSize: '9.5px', color: '#71717A', fontWeight: '500' }}>Local Perception</span>
         </div>
-        <div style={{ fontSize: '11px', fontWeight: '700', color: '#A78BFA' }}>
-          {telemetry ? `${telemetry.redactedElementCount} fields` : '8 fields'}
+        <div style={{ fontSize: '11px', fontWeight: '600', color: '#F4F4F5', fontFamily: 'Geist Mono, monospace' }}>
+          {telemetry ? `${Math.round(telemetry.totalClientTimeMs)} ms` : '52 ms'}
+        </div>
+      </div>
+
+      {/* Redactions */}
+      <div style={{
+        background: '#11141A',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '8px',
+        padding: '7px 9px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+          <ShieldCheck size={11} color="#A78BFA" />
+          <span style={{ fontSize: '9.5px', color: '#71717A', fontWeight: '500' }}>Masked Fields</span>
+        </div>
+        <div style={{ fontSize: '11px', fontWeight: '600', color: '#F4F4F5' }}>
+          {telemetry ? `${telemetry.redactedElementCount} elements` : '8 elements'}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Brain, Activity, Clock, ChevronDown, ChevronUp, CheckCircle, AlertCircle, Code, ShieldAlert, Cpu } from 'lucide-react';
+import { Cpu, ChevronDown, ChevronUp, Code2, Sparkles, Terminal } from 'lucide-react';
 
 interface ServerState {
   modelUsed: string;
@@ -19,142 +19,203 @@ export const ServerReasoningCard: React.FC<Props> = ({ serverState }) => {
 
   const isConnected = serverState?.serverConnected ?? false;
   const model = serverState?.modelUsed || 'Not Connected';
-  const serverLatency = serverState?.serverReasoningTimeMs ? `${Math.round(serverState.serverReasoningTimeMs)}ms` : '-- ms';
-  const rtt = serverState?.networkRoundtripMs ? `${Math.round(serverState.networkRoundtripMs)}ms` : '-- ms';
+  const serverLatency = serverState?.serverReasoningTimeMs ? `${Math.round(serverState.serverReasoningTimeMs)} ms` : '--';
+  const rtt = serverState?.networkRoundtripMs ? `${Math.round(serverState.networkRoundtripMs)} ms` : '--';
   const action = serverState?.lastAction;
 
-  // Determine risk level
-  const getRiskBadge = (actName?: string) => {
+  const getActionBadgeStyle = (actName?: string) => {
     const act = (actName || '').toLowerCase();
     if (act.includes('submit') || act.includes('pay') || act.includes('delete')) {
-      return { label: 'Risky (Form Submit)', bg: 'rgba(239, 68, 68, 0.15)', color: '#EF4444', border: '#EF4444' };
+      return { bg: 'rgba(244, 63, 94, 0.12)', text: '#FDA4AF', border: 'rgba(244, 63, 94, 0.3)' };
     }
     if (act.includes('click') || act.includes('type')) {
-      return { label: 'Medium (Interaction)', bg: 'rgba(249, 115, 22, 0.15)', color: '#F97316', border: '#F97316' };
+      return { bg: 'rgba(16, 185, 129, 0.12)', text: '#6EE7B7', border: 'rgba(16, 185, 129, 0.3)' };
     }
-    return { label: 'Safe (Inspection)', bg: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '#10B981' };
+    return { bg: 'rgba(56, 189, 248, 0.12)', text: '#7DD3FC', border: 'rgba(56, 189, 248, 0.3)' };
   };
 
-  const risk = getRiskBadge(action?.action);
+  const actionStyle = getActionBadgeStyle(action?.action);
 
   return (
-    <div style={{ margin: '14px 16px', background: '#1E293B', border: '1px solid #334155', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#0F172A', borderBottom: '1px solid #334155' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Brain size={15} color="#10B981" />
-          <span style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.06em', color: '#F1F5F9' }}>
-            SERVER REASONING ENGINE
+    <div style={{
+      margin: '12px 14px',
+      background: '#11141A',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '10px',
+      overflow: 'hidden',
+      boxShadow: '0 8px 24px -6px rgba(0, 0, 0, 0.45)',
+    }}>
+      {/* Card Header */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '9px 12px',
+        background: '#0D1016',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Cpu size={13} color="#A1A1AA" />
+          <span style={{ fontSize: '11px', fontWeight: '600', color: '#D4D4D8', letterSpacing: '0.02em' }}>
+            Reasoning Engine Telemetry
           </span>
         </div>
-        <div>
-          <span
-            style={{
-              fontSize: '10px',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              fontWeight: '700',
-              background: isConnected ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-              color: isConnected ? '#10B981' : '#EF4444',
-              border: `1px solid ${isConnected ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            {isConnected ? <CheckCircle size={10} /> : <AlertCircle size={10} />}
-            {isConnected ? 'ONLINE' : 'OFFLINE'}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{
+            width: '6px',
+            height: '6px',
+            borderRadius: '50%',
+            background: isConnected ? '#10B981' : '#F43F5E',
+            display: 'inline-block',
+          }} />
+          <span style={{
+            fontSize: '10.5px',
+            fontWeight: '600',
+            color: isConnected ? '#34D399' : '#FB7185',
+          }}>
+            {isConnected ? 'Connected' : 'Offline'}
           </span>
         </div>
       </div>
 
-      {/* Telemetry Metrics Grid */}
-      <div style={{ padding: '12px 14px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '8px', marginBottom: '10px' }}>
-          {/* AI Model */}
-          <div style={{ background: '#0F172A', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-            <span style={{ fontSize: '9px', color: '#94A3B8', display: 'block', fontWeight: '600' }}>AI MODEL</span>
-            <span style={{ fontSize: '11px', fontWeight: '700', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', whiteSpace: 'nowrap', marginTop: '2px' }}>
-              {model}
+      {/* Metrics Row */}
+      <div style={{ padding: '10px 12px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr 1fr',
+          gap: '6px',
+          marginBottom: '8px',
+        }}>
+          {/* Model */}
+          <div style={{
+            background: '#0D1016',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            padding: '6px 8px',
+          }}>
+            <span style={{ fontSize: '9.5px', color: '#71717A', display: 'block', fontWeight: '500' }}>Active VLM</span>
+            <span style={{ fontSize: '11px', fontWeight: '600', color: '#E4E4E7', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', whiteSpace: 'nowrap', marginTop: '1px' }}>
+              {model.replace('google/', '').replace('gemini-', 'Gemini ')}
             </span>
           </div>
 
-          {/* VLM Inference */}
-          <div style={{ background: '#0F172A', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-            <span style={{ fontSize: '9px', color: '#94A3B8', display: 'block', fontWeight: '600' }}>VLM INFERENCE</span>
-            <span style={{ fontSize: '11px', fontWeight: '700', color: '#10B981', fontFamily: 'JetBrains Mono, monospace', marginTop: '2px', display: 'block' }}>
+          {/* VLM Latency */}
+          <div style={{
+            background: '#0D1016',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            padding: '6px 8px',
+          }}>
+            <span style={{ fontSize: '9.5px', color: '#71717A', display: 'block', fontWeight: '500' }}>Inference</span>
+            <span style={{ fontSize: '11px', fontWeight: '600', color: '#10B981', fontFamily: 'Geist Mono, monospace', display: 'block', marginTop: '1px' }}>
               {serverLatency}
             </span>
           </div>
 
-          {/* Network RTT */}
-          <div style={{ background: '#0F172A', border: '1px solid #334155', borderRadius: '8px', padding: '8px 10px' }}>
-            <span style={{ fontSize: '9px', color: '#94A3B8', display: 'block', fontWeight: '600' }}>NETWORK RTT</span>
-            <span style={{ fontSize: '11px', fontWeight: '700', color: '#F97316', fontFamily: 'JetBrains Mono, monospace', marginTop: '2px', display: 'block' }}>
+          {/* RTT */}
+          <div style={{
+            background: '#0D1016',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            padding: '6px 8px',
+          }}>
+            <span style={{ fontSize: '9.5px', color: '#71717A', display: 'block', fontWeight: '500' }}>Network RTT</span>
+            <span style={{ fontSize: '11px', fontWeight: '600', color: '#38BDF8', fontFamily: 'Geist Mono, monospace', display: 'block', marginTop: '1px' }}>
               {rtt}
             </span>
           </div>
         </div>
 
-        {/* Action Card */}
+        {/* Action Display */}
         {action ? (
-          <div style={{ background: '#0F172A', border: '1px solid #334155', borderRadius: '8px', padding: '10px 12px', fontSize: '12px' }}>
+          <div style={{
+            background: '#0D1016',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            padding: '8px 10px',
+            fontSize: '11.5px',
+          }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ background: '#10B981', color: '#0F172A', fontWeight: '800', fontSize: '10px', padding: '2px 6px', borderRadius: '4px', letterSpacing: '0.04em' }}>
-                  ACTION: {action.action?.toUpperCase()}
+                <span style={{
+                  background: actionStyle.bg,
+                  color: actionStyle.text,
+                  border: `1px solid ${actionStyle.border}`,
+                  fontSize: '9.5px',
+                  fontWeight: '600',
+                  padding: '1px 6px',
+                  borderRadius: '4px',
+                  fontFamily: 'Geist Mono, monospace',
+                }}>
+                  {action.action?.toUpperCase()}
                 </span>
                 {action.selector && (
-                  <code style={{ color: '#38BDF8', fontSize: '11px', background: 'rgba(56, 189, 248, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                  <code style={{
+                    color: '#A1A1AA',
+                    fontSize: '10.5px',
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    padding: '1px 6px',
+                    borderRadius: '4px',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                  }}>
                     {action.selector}
                   </code>
                 )}
               </div>
-              <span style={{ fontSize: '9px', fontWeight: '700', color: risk.color, background: risk.bg, padding: '2px 6px', borderRadius: '4px', border: `1px solid ${risk.border}` }}>
-                {risk.label}
-              </span>
             </div>
-            <div style={{ color: '#CBD5E1', fontSize: '11px', lineHeight: '1.45', fontStyle: 'italic', marginTop: '4px' }}>
-              "{action.thought || 'Executing planned browser workflow...'}"
+
+            <div style={{ color: '#A1A1AA', fontSize: '11px', lineHeight: '1.4', fontStyle: 'italic' }}>
+              "{action.thought || 'Executing autonomous browser step...'}"
             </div>
           </div>
         ) : (
-          <div style={{ fontSize: '11px', color: '#94A3B8', fontStyle: 'italic', padding: '6px 0', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#71717A', padding: '6px 0', textAlign: 'center' }}>
             {serverState?.lastError ? (
-              <span style={{ color: '#EF4444' }}>Error: {serverState.lastError}</span>
+              <span style={{ color: '#FB7185' }}>Error: {serverState.lastError}</span>
             ) : (
-              'Awaiting agent execution to receive reasoning plan...'
+              'Awaiting action execution request...'
             )}
           </div>
         )}
 
-        {/* JSON Inspector Toggle */}
+        {/* JSON Inspector */}
         {action && (
-          <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ marginTop: '6px', display: 'flex', justifyContent: 'flex-end' }}>
             <button
               onClick={() => setShowJson(!showJson)}
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#94A3B8',
+                color: '#71717A',
                 fontSize: '10px',
-                fontWeight: '600',
+                fontWeight: '500',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px',
-                padding: '2px 6px',
+                gap: '3px',
+                padding: '2px 4px',
               }}
             >
-              <Code size={11} />
-              <span>{showJson ? 'Hide Action JSON' : 'Inspect Action JSON'}</span>
-              {showJson ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+              <Code2 size={11} />
+              <span>{showJson ? 'Hide Payload' : 'Inspect JSON'}</span>
+              {showJson ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
             </button>
           </div>
         )}
 
         {showJson && action && (
-          <pre style={{ background: '#0F172A', border: '1px solid #334155', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#10B981', overflowX: 'auto', marginTop: '6px', fontFamily: 'JetBrains Mono, monospace' }}>
+          <pre style={{
+            background: '#07080A',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            padding: '8px',
+            fontSize: '10px',
+            color: '#34D399',
+            overflowX: 'auto',
+            marginTop: '4px',
+            fontFamily: 'Geist Mono, monospace',
+          }}>
             {JSON.stringify(action, null, 2)}
           </pre>
         )}

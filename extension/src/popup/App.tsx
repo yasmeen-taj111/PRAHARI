@@ -10,7 +10,7 @@ import {
   ClientTelemetry,
   RedactionBox,
 } from '../../../shared/types';
-import { Shield, Play, RotateCcw, Sparkles, CheckCircle2, ChevronDown, ChevronUp, Check, ShieldCheck, Activity } from 'lucide-react';
+import { Shield, Play, RotateCcw, ChevronDown, ChevronUp, Check, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [userTask, setUserTask] = useState('Fill registration form while shielding all PII and passwords');
@@ -83,7 +83,7 @@ export default function App() {
   const handleTriggerAgent = () => {
     if (!userTask.trim()) return;
     setIsRunning(true);
-    setStatusMessage('Perceiving viewport & shielding PII in memory...');
+    setStatusMessage('Capturing viewport & masking PII in-memory...');
 
     if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
       chrome.runtime.sendMessage({ type: 'TRIGGER_AGENT_STEP', userTask }, (response) => {
@@ -91,7 +91,7 @@ export default function App() {
         if (response && response.success) {
           const actionName = response.data?.actionPlan?.action?.action || 'Done';
           const model = response.data?.actionPlan?.modelUsed || 'Server';
-          setStatusMessage(`Action: ${actionName.toUpperCase()} via ${model}`);
+          setStatusMessage(`Action executed: ${actionName.toUpperCase()} via ${model}`);
           fetchSessionState();
         } else {
           setStatusMessage(`Error: ${response?.error || 'Execution failed'}`);
@@ -101,7 +101,7 @@ export default function App() {
     } else {
       setTimeout(() => {
         setIsRunning(false);
-        setStatusMessage('Dev simulation mode');
+        setStatusMessage('Simulation complete');
       }, 800);
     }
   };
@@ -126,69 +126,115 @@ export default function App() {
   const telemetry: ClientTelemetry | undefined = sessionState?.lastTelemetry;
   const isZeroTrustVerified = sessionState ? !!sessionState.lastSanitizedImage : true;
   const isServerOnline = sessionState?.serverState?.serverConnected ?? false;
-  const currentModel = sessionState?.serverState?.modelUsed || 'Gemini 1.5 Flash';
+  const currentModel = sessionState?.serverState?.modelUsed || 'Gemini Flash';
 
   return (
-    <div style={{ paddingBottom: '20px', background: '#0F172A', color: '#F1F5F9' }}>
+    <div style={{ paddingBottom: '16px', background: '#090B0E', color: '#F4F4F5' }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px', background: '#0B0F19', borderBottom: '1px solid #334155' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10B981', borderRadius: '8px', padding: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Shield size={18} color="#10B981" />
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '12px 14px',
+        background: '#0D1016',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.25)',
+            borderRadius: '6px',
+            padding: '5px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Shield size={14} color="#10B981" />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '14px', fontWeight: '800', letterSpacing: '0.04em', color: '#F8FAFC' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.04em', color: '#FAFAFA' }}>
                 PRAHARI
               </span>
-              <span style={{ fontSize: '10px', background: '#1E293B', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '1px 6px', borderRadius: '4px', fontWeight: '700' }}>
+              <span style={{
+                fontSize: '9.5px',
+                background: 'rgba(255, 255, 255, 0.06)',
+                color: '#A1A1AA',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '0 5px',
+                borderRadius: '4px',
+                fontWeight: '500',
+                fontFamily: 'Geist Mono, monospace',
+              }}>
                 v1.0.0
               </span>
             </div>
-            <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '1px' }}>
-              ISRO #26171 | On-Device Visual Shield
+            <div style={{ fontSize: '10px', color: '#71717A', marginTop: '1px' }}>
+              ISRO #26171 • On-Device Visual Shield
             </div>
           </div>
         </div>
 
-        <button
-          onClick={handleReset}
-          title="Reset Session"
-          style={{
-            background: 'transparent',
-            border: '1px solid #334155',
-            color: '#94A3B8',
-            borderRadius: '8px',
-            padding: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
-        >
-          <RotateCcw size={14} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Live Status Pill */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            background: isServerOnline ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)',
+            border: `1px solid ${isServerOnline ? 'rgba(16, 185, 129, 0.22)' : 'rgba(244, 63, 94, 0.22)'}`,
+            padding: '3px 8px',
+            borderRadius: '9999px',
+            fontSize: '10px',
+            fontWeight: '500',
+          }}>
+            <span
+              style={{
+                width: '5px',
+                height: '5px',
+                borderRadius: '50%',
+                background: isServerOnline ? '#10B981' : '#F43F5E',
+              }}
+              className={isServerOnline ? 'status-dot-pulse' : ''}
+            />
+            <span style={{ color: isServerOnline ? '#34D399' : '#FB7185' }}>
+              {isServerOnline ? 'Online' : 'Offline'}
+            </span>
+          </div>
+
+          <button
+            onClick={handleReset}
+            title="Reset Session"
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              color: '#71717A',
+              borderRadius: '6px',
+              padding: '5px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <RotateCcw size={12} />
+          </button>
+        </div>
       </div>
 
-      {/* Live Status Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 16px', background: '#1E293B', borderBottom: '1px solid #334155', fontSize: '11px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: isServerOnline ? '#10B981' : '#EF4444', display: 'inline-block' }} className={isServerOnline ? 'pulse-emerald' : ''} />
-          <span style={{ fontWeight: '600', color: isServerOnline ? '#10B981' : '#EF4444' }}>
-            {isServerOnline ? 'ONLINE' : 'OFFLINE'}
-          </span>
-          <span style={{ color: '#64748B' }}>•</span>
-          <span style={{ color: '#CBD5E1', fontWeight: '500' }}>{currentModel}</span>
-        </div>
-        <div style={{ color: '#94A3B8', fontWeight: '500' }}>
-          Zero-Trust Client
-        </div>
-      </div>
-
-      {/* Main Action Section */}
-      <div style={{ padding: '14px 16px 0 16px' }}>
-        <div style={{ background: '#1E293B', border: '1px solid #334155', borderRadius: '10px', padding: '14px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-          <label style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', display: 'block', marginBottom: '6px', letterSpacing: '0.04em' }}>
-            AGENT INSTRUCTION
-          </label>
+      {/* Command Prompt Box */}
+      <div style={{ padding: '12px 14px 0 14px' }}>
+        <div style={{
+          background: '#11141A',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: '8px',
+          padding: '10px 12px',
+          boxShadow: '0 8px 24px -6px rgba(0, 0, 0, 0.45)',
+        }}>
+          <div style={{ fontSize: '10px', fontWeight: '600', color: '#71717A', marginBottom: '5px', letterSpacing: '0.02em' }}>
+            AGENT DIRECTIVE
+          </div>
           <input
             type="text"
             value={userTask}
@@ -196,16 +242,15 @@ export default function App() {
             placeholder="Instruct PRAHARI agent..."
             style={{
               width: '100%',
-              boxSizing: 'border-box',
-              background: '#0F172A',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              padding: '10px 12px',
-              color: '#F1F5F9',
-              fontSize: '12.5px',
+              background: '#090B0E',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '6px',
+              padding: '8px 10px',
+              color: '#F4F4F5',
+              fontSize: '12px',
               outline: 'none',
-              marginBottom: '12px',
-              fontFamily: 'Inter, sans-serif',
+              marginBottom: '8px',
+              fontFamily: 'inherit',
             }}
           />
           <button
@@ -213,31 +258,40 @@ export default function App() {
             disabled={isRunning}
             style={{
               width: '100%',
-              background: isRunning ? '#475569' : '#10B981',
-              color: '#FFFFFF',
+              background: isRunning ? 'rgba(255, 255, 255, 0.08)' : '#10B981',
+              color: isRunning ? '#71717A' : '#090B0E',
               border: 'none',
-              borderRadius: '8px',
-              padding: '11px 16px',
-              fontSize: '13px',
-              fontWeight: '700',
+              borderRadius: '6px',
+              padding: '8px 14px',
+              fontSize: '12px',
+              fontWeight: '600',
               cursor: isRunning ? 'wait' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
-              boxShadow: isRunning ? 'none' : '0 4px 14px rgba(16, 185, 129, 0.35)',
+              gap: '6px',
+              boxShadow: isRunning ? 'none' : '0 2px 10px rgba(16, 185, 129, 0.25)',
               transition: 'all 0.15s ease',
             }}
           >
-            <Play size={14} fill="#FFFFFF" />
-            <span>{isRunning ? 'Perceiving & Shielding...' : '🚀 ACT (PERCEIVE & REASON)'}</span>
+            <Play size={12} fill={isRunning ? '#71717A' : '#090B0E'} />
+            <span>{isRunning ? 'Perceiving & Masking...' : 'Execute Agent Step'}</span>
           </button>
         </div>
       </div>
 
-      {/* Status Alert Banner */}
+      {/* Status Notice */}
       {statusMessage && (
-        <div style={{ margin: '8px 16px 0 16px', fontSize: '11px', color: statusMessage.startsWith('Error') ? '#EF4444' : '#10B981', fontWeight: '600', padding: '6px 10px', background: 'rgba(15, 23, 42, 0.8)', borderRadius: '6px', border: '1px solid #334155' }}>
+        <div style={{
+          margin: '6px 14px 0 14px',
+          fontSize: '10.5px',
+          color: statusMessage.startsWith('Error') ? '#FB7185' : '#34D399',
+          padding: '5px 8px',
+          background: statusMessage.startsWith('Error') ? 'rgba(244, 63, 94, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+          borderRadius: '5px',
+          border: `1px solid ${statusMessage.startsWith('Error') ? 'rgba(244, 63, 94, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
+          fontWeight: '500',
+        }}>
           {statusMessage}
         </div>
       )}
@@ -254,28 +308,28 @@ export default function App() {
       {/* Server Reasoning Panel */}
       <ServerReasoningCard serverState={sessionState?.serverState} />
 
-      {/* Client Telemetry Gauges */}
+      {/* Client Telemetry */}
       <BackendStatus telemetry={telemetry} backend={telemetry?.backendUsed || 'webgpu'} />
 
-      {/* Accordion Toggle for Shield Policies */}
-      <div style={{ margin: '10px 16px 0 16px', display: 'flex', justifyContent: 'flex-end' }}>
+      {/* Policies Accordion */}
+      <div style={{ margin: '8px 14px 0 14px', display: 'flex', justifyContent: 'flex-end' }}>
         <button
           onClick={() => setShowConfig(!showConfig)}
           style={{
             background: 'transparent',
             border: 'none',
-            color: '#94A3B8',
-            fontSize: '11px',
-            fontWeight: '600',
+            color: '#71717A',
+            fontSize: '10.5px',
+            fontWeight: '500',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-            padding: '4px 6px',
+            gap: '3px',
+            padding: '2px 4px',
           }}
         >
-          <span>{showConfig ? 'Hide Shield Policies' : 'Configure Shield Policies'}</span>
-          {showConfig ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+          <span>{showConfig ? 'Hide Policies' : 'Configure Shield Policies'}</span>
+          {showConfig ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
         </button>
       </div>
 
@@ -286,19 +340,29 @@ export default function App() {
       {/* Privacy Audit Trail */}
       <PrivacyAuditLog logs={sessionState?.auditLog || []} />
 
-      {/* Bottom Verification Row */}
-      <div style={{ margin: '12px 16px 0 16px', padding: '8px 12px', background: '#1E293B', border: '1px solid #334155', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94A3B8' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Check size={11} color="#10B981" /> Verhoeff & Luhn
+      {/* Bottom Verification Badges */}
+      <div style={{
+        margin: '10px 14px 0 14px',
+        padding: '7px 10px',
+        background: '#11141A',
+        border: '1px solid rgba(255, 255, 255, 0.06)',
+        borderRadius: '6px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        fontSize: '9.5px',
+        color: '#71717A',
+      }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+          <Check size={10} color="#10B981" /> Verhoeff Checksum
         </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Check size={11} color="#10B981" /> 0 Bytes PII
+        <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+          <Check size={10} color="#10B981" /> Zero PII Transmitted
         </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Check size={11} color="#10B981" /> 52ms RTT
+        <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+          <Check size={10} color="#10B981" /> 52ms Local RTT
         </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Check size={11} color="#10B981" /> Manifest V3
+        <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+          <Check size={10} color="#10B981" /> Manifest V3
         </span>
       </div>
     </div>

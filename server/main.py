@@ -18,7 +18,6 @@ import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
 from server.config import settings
 from server.api.routes import router as api_router
 
@@ -62,14 +61,10 @@ async def add_cors_headers(request: Request, call_next):
 app.include_router(api_router, prefix="/api/v1")
 app.include_router(api_router, prefix="") # Expose /metrics and /health at root as well
 
-# Mount demo portal
+# Mount the portal explicitly at /demo for the extension/demo workflow.
 demo_dir = os.path.abspath(os.path.join(PROJECT_ROOT, "demo"))
 if os.path.exists(demo_dir):
     app.mount("/demo", StaticFiles(directory=demo_dir, html=True), name="demo")
-
-@app.get("/")
-async def root():
-    return RedirectResponse(url="/demo/index.html")
 
 @app.websocket("/ws/agent")
 async def websocket_agent_endpoint(websocket: WebSocket):
@@ -80,6 +75,11 @@ async def websocket_agent_endpoint(websocket: WebSocket):
             await websocket.send_text(f"PRAHARI Stream Connected: {len(data)} bytes received")
     except WebSocketDisconnect:
         pass
+
+# Serve the identical portal directly from the API server root.  This mount is
+# intentionally last, so the API and WebSocket routes above retain precedence.
+if os.path.exists(demo_dir):
+    app.mount("/", StaticFiles(directory=demo_dir, html=True), name="portal")
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.HOST, port=settings.PORT)

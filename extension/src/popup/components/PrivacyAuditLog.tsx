@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, CheckCircle2, AlertTriangle, Terminal } from 'lucide-react';
+import { Terminal, Shield } from 'lucide-react';
 
 interface AuditItem {
   timestamp: string;
@@ -14,17 +14,17 @@ interface Props {
 
 export const PrivacyAuditLog: React.FC<Props> = ({ logs }) => {
   return (
-    <div style={{ margin: '12px 14px', background: '#0F172A', border: '1px solid #1E293B', borderRadius: '8px', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 10px', background: '#131E36', borderBottom: '1px solid #1E293B' }}>
-        <Terminal size={12} color="#94A3B8" />
-        <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.05em', color: '#94A3B8' }}>
+    <div style={{ margin: '14px 16px', background: '#1E293B', border: '1px solid #334155', borderRadius: '10px', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: '#0F172A', borderBottom: '1px solid #334155' }}>
+        <Terminal size={12} color="#10B981" />
+        <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.06em', color: '#F1F5F9' }}>
           SENTINEL PRIVACY AUDIT TRAIL
         </span>
       </div>
-      <div style={{ maxHeight: '110px', overflowY: 'auto', padding: '6px 8px', fontSize: '11px', fontFamily: 'monospace' }}>
+      <div style={{ maxHeight: '105px', overflowY: 'auto', padding: '8px 12px', fontSize: '11px', fontFamily: 'JetBrains Mono, monospace', background: '#0F172A' }}>
         {logs.length === 0 ? (
-          <div style={{ color: '#475569', textAlign: 'center', padding: '12px 0', fontSize: '11px' }}>
-            No sensitive elements detected on this page yet
+          <div style={{ color: '#64748B', textAlign: 'center', padding: '10px 0', fontSize: '11px' }}>
+            Zero-Trust Shield Active • No PII leaks detected
           </div>
         ) : (
           logs.slice(0, 15).map((log, idx) => (
@@ -33,10 +33,10 @@ export const PrivacyAuditLog: React.FC<Props> = ({ logs }) => {
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '6px',
+                gap: '8px',
                 padding: '3px 0',
-                borderBottom: '1px solid rgba(30, 41, 59, 0.4)',
-                color: log.type === 'ERROR' ? '#EF4444' : log.type === 'REDACTION' ? '#F59E0B' : '#06B6D4',
+                borderBottom: '1px solid rgba(51, 65, 85, 0.4)',
+                color: log.type === 'ERROR' ? '#EF4444' : log.type === 'REDACTION' ? '#10B981' : '#38BDF8',
               }}
             >
               <span style={{ color: '#64748B', fontSize: '9px', whiteSpace: 'nowrap' }}>[{log.timestamp}]</span>

@@ -129,9 +129,9 @@ export default function App() {
   const currentModel = sessionState?.serverState?.modelUsed || 'Gemini Flash';
 
   return (
-    <div style={{ paddingBottom: '16px', background: '#090B0E', color: '#F4F4F5' }}>
+    <div className="popup-shell" style={{ paddingBottom: '16px', background: '#090B0E', color: '#F4F4F5' }}>
       {/* Top Header */}
-      <div style={{
+      <header className="popup-header" style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -203,6 +203,7 @@ export default function App() {
           </div>
 
           <button
+            className="icon-button"
             onClick={handleReset}
             title="Reset Session"
             style={{
@@ -221,11 +222,11 @@ export default function App() {
             <RotateCcw size={12} />
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Command Prompt Box */}
-      <div style={{ padding: '12px 14px 0 14px' }}>
-        <div style={{
+      <div className="command-section" style={{ padding: '12px 14px 0 14px' }}>
+        <div className="command-card" style={{
           background: '#11141A',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           borderRadius: '8px',
@@ -236,6 +237,7 @@ export default function App() {
             AGENT DIRECTIVE
           </div>
           <input
+            className="command-input"
             type="text"
             value={userTask}
             onChange={(e) => setUserTask(e.target.value)}
@@ -254,6 +256,7 @@ export default function App() {
             }}
           />
           <button
+            className="execute-button"
             onClick={handleTriggerAgent}
             disabled={isRunning}
             style={{
@@ -282,7 +285,7 @@ export default function App() {
 
       {/* Status Notice */}
       {statusMessage && (
-        <div style={{
+        <div className="status-notice" style={{
           margin: '6px 14px 0 14px',
           fontSize: '10.5px',
           color: statusMessage.startsWith('Error') ? '#FB7185' : '#34D399',
@@ -312,8 +315,9 @@ export default function App() {
       <BackendStatus telemetry={telemetry} backend={telemetry?.backendUsed || 'webgpu'} />
 
       {/* Policies Accordion */}
-      <div style={{ margin: '8px 14px 0 14px', display: 'flex', justifyContent: 'flex-end' }}>
+      <div className="policy-toggle-wrap" style={{ margin: '8px 14px 0 14px', display: 'flex', justifyContent: 'flex-end' }}>
         <button
+          className="text-button"
           onClick={() => setShowConfig(!showConfig)}
           style={{
             background: 'transparent',
@@ -341,7 +345,7 @@ export default function App() {
       <PrivacyAuditLog logs={sessionState?.auditLog || []} />
 
       {/* Bottom Verification Badges */}
-      <div style={{
+      <div className="verification-footer" style={{
         margin: '10px 14px 0 14px',
         padding: '7px 10px',
         background: '#11141A',

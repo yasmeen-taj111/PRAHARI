@@ -11,7 +11,8 @@
   <script>
     // Inline script to prevent theme flashing
     (function() {
-      const savedTheme = localStorage.getItem('prahari_demo_theme');
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem('prahari_demo_theme'); } catch (_) {}
       if (savedTheme === 'dark' || savedTheme === 'light') {
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -51,7 +52,7 @@
         <a href="#security" class="nav-link">Security Policies</a>
 
         <!-- Modern Theme Toggle Button -->
-        <button id="theme-toggle-btn" class="theme-toggle" type="button" aria-label="Toggle Light and Dark Mode" title="Toggle Light / Dark Mode">
+        <button id="theme-toggle-btn" class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch theme">
           <div class="toggle-track">
             <div class="toggle-thumb">
               <svg class="icon-sun" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -82,16 +83,38 @@
       <div class="banner-tag">SIH PROBLEM STATEMENT #26171 EVALUATION BENCHMARK</div>
       <h1>Scientist & Developer Access Registration</h1>
       <p>Subscribe to high-resolution multispectral imagery, NavIC ephemeris feeds, and atmospheric satellite telemetry.</p>
+      <div class="hero-facts" aria-label="Registration service details">
+        <div class="hero-fact">
+          <span class="fact-mark" aria-hidden="true">01</span>
+          <span><strong>Identity review</strong>Researcher KYC workflow</span>
+        </div>
+        <div class="hero-fact">
+          <span class="fact-mark" aria-hidden="true">02</span>
+          <span><strong>Privacy-first handling</strong>Fields protected in-browser</span>
+        </div>
+        <div class="hero-fact">
+          <span class="fact-mark" aria-hidden="true">03</span>
+          <span><strong>Annual access</strong>Telemetry subscription request</span>
+        </div>
+      </div>
     </div>
 
     <div class="portal-grid">
       <!-- Left Column: Registration Form (Modern Card Design) -->
       <section class="card form-section">
-        <div class="card-header">
-          <div class="step-badge">STAGE 01</div>
-          <h2>Authorized Researcher KYC Registration</h2>
-          <p class="card-desc">All sensitive fields are dynamically shielded client-side before cloud reasoning transmission.</p>
-        </div>
+          <div class="card-header">
+            <div class="step-badge">STAGE 01</div>
+            <h2>Authorized Researcher KYC Registration</h2>
+            <p class="card-desc">All sensitive fields are dynamically shielded client-side before cloud reasoning transmission.</p>
+          </div>
+
+          <div class="form-assurance" role="note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+            <span><strong>Protected registration session.</strong> Complete the form to prepare an access request; submission remains subject to authorization review.</span>
+          </div>
 
         <form id="isro-registration-form" onsubmit="handleFormSubmit(event)">
           <!-- Personal Details -->

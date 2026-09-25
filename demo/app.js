@@ -8,14 +8,25 @@ function getCurrentTheme() {
 
 function updateThemeLabel(theme) {
   const label = document.getElementById('theme-text-label');
+  const toggle = document.getElementById('theme-toggle-btn');
   if (label) {
-    label.innerText = theme === 'dark' ? 'Dark' : 'Light';
+    label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  }
+  if (toggle) {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+    toggle.setAttribute('aria-label', `Switch to ${nextTheme} theme`);
+    toggle.setAttribute('title', `Switch to ${nextTheme} theme`);
   }
 }
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('prahari_demo_theme', theme);
+  try {
+    localStorage.setItem('prahari_demo_theme', theme);
+  } catch (_) {
+    // Theme switching remains available when browser storage is restricted.
+  }
   updateThemeLabel(theme);
 }
 
@@ -25,19 +36,19 @@ function toggleTheme() {
   applyTheme(next);
 }
 
-// Attach event listeners as soon as DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+function initialiseThemeToggle() {
   const toggleBtn = document.getElementById('theme-toggle-btn');
   if (toggleBtn) {
-    toggleBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleTheme();
-    });
+    toggleBtn.addEventListener('click', toggleTheme);
   }
-
-  // Update initial label
   updateThemeLabel(getCurrentTheme());
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialiseThemeToggle, { once: true });
+} else {
+  initialiseThemeToggle();
+}
 
 // ==========================================================================
 // KYC Registration Form Actions

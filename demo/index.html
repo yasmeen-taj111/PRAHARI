@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    // Inline script to prevent theme flashing
+    (function() {
+      const savedTheme = localStorage.getItem('prahari_demo_theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 </head>
 <body>
-  <!-- Top Navigation -->
+  <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand">
@@ -31,28 +44,33 @@
       <div class="nav-links">
         <div class="status-indicator">
           <span class="dot"></span>
-          <span>Telemetry Gateway Live</span>
+          <span>Gateway Live</span>
         </div>
 
         <a href="#docs" class="nav-link">API Specs</a>
-        <a href="#help" class="nav-link">Security Guidelines</a>
+        <a href="#security" class="nav-link">Security Policies</a>
 
-        <!-- Light / Dark Mode Toggle -->
-        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Theme" onclick="toggleTheme()">
-          <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v2"/>
-            <path d="M12 20v2"/>
-            <path d="m4.93 4.93 1.41 1.41"/>
-            <path d="m17.66 17.66 1.41 1.41"/>
-            <path d="M2 12h2"/>
-            <path d="M20 12h2"/>
-            <path d="m6.34 17.66-1.41 1.41"/>
-            <path d="m19.07 4.93-1.41 1.41"/>
-          </svg>
-          <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-          </svg>
+        <!-- Modern Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="theme-toggle" type="button" aria-label="Toggle Light and Dark Mode" title="Toggle Light / Dark Mode">
+          <div class="toggle-track">
+            <div class="toggle-thumb">
+              <svg class="icon-sun" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2"/>
+                <path d="M12 20v2"/>
+                <path d="m4.93 4.93 1.41 1.41"/>
+                <path d="m17.66 17.66 1.41 1.41"/>
+                <path d="M2 12h2"/>
+                <path d="M20 12h2"/>
+                <path d="m6.34 17.66-1.41 1.41"/>
+                <path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+              <svg class="icon-moon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="theme-text" id="theme-text-label">Theme</span>
         </button>
       </div>
     </div>
@@ -61,17 +79,18 @@
   <!-- Main Container -->
   <main class="main-wrapper">
     <div class="hero-banner">
-      <div class="banner-tag">SIH PROBLEM STATEMENT #26171 BENCHMARK ENVIRONMENT</div>
+      <div class="banner-tag">SIH PROBLEM STATEMENT #26171 EVALUATION BENCHMARK</div>
       <h1>Scientist & Developer Access Registration</h1>
       <p>Subscribe to high-resolution multispectral imagery, NavIC ephemeris feeds, and atmospheric satellite telemetry.</p>
     </div>
 
     <div class="portal-grid">
-      <!-- Left Column: Registration & KYC Form -->
+      <!-- Left Column: Registration Form (Modern Card Design) -->
       <section class="card form-section">
         <div class="card-header">
           <div class="step-badge">STAGE 01</div>
           <h2>Authorized Researcher KYC Registration</h2>
+          <p class="card-desc">All sensitive fields are dynamically shielded client-side before cloud reasoning transmission.</p>
         </div>
 
         <form id="isro-registration-form" onsubmit="handleFormSubmit(event)">
@@ -102,7 +121,7 @@
           <div class="form-group">
             <label for="aadhaar">Aadhaar Identification Number (12-Digit)</label>
             <input type="text" id="aadhaar" name="aadhaar" placeholder="2938 4728 1934" maxlength="14" required />
-            <span class="field-hint">Validated via Verhoeff algorithm and shielded locally before network transmission</span>
+            <span class="field-hint">Shielded with Verhoeff mathematical checksum directly in browser memory</span>
           </div>
 
           <!-- Password & Auth -->
@@ -138,9 +157,10 @@
             </div>
           </div>
 
+          <!-- Form Action Buttons -->
           <div class="form-actions">
             <button type="button" class="btn-secondary" onclick="prefillDummyData()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
@@ -149,7 +169,7 @@
             </button>
             <button type="submit" id="submit-btn" class="btn-primary">
               <span>Verify Credentials & Submit Application</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14"/>
                 <path d="m12 5 7 7-7 7"/>
               </svg>
@@ -158,13 +178,13 @@
         </form>
       </section>
 
-      <!-- Right Column: Face Verification & Live Telemetry Stream -->
+      <!-- Right Column: Verification & Satellite Feeds -->
       <aside class="sidebar-section">
-        <!-- Face ID Card -->
+        <!-- Biometric Profile Card -->
         <div class="card face-card">
           <div class="card-header">
-            <div class="step-badge cyan">STAGE 02</div>
-            <h3>Biometric Profile Verification</h3>
+            <div class="step-badge indigo">STAGE 02</div>
+            <h3>Biometric Verification</h3>
           </div>
           <div class="avatar-preview-box">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Researcher Profile Photo" class="user-avatar" id="profile-img" />
@@ -172,7 +192,7 @@
               <strong>Dr. Ananya Sharma</strong>
               <span>Principal Investigator — Payload Dynamics</span>
               <div class="verified-pill">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 6 9 17l-5-5"/>
                 </svg>
                 <span>Biometrics Verified</span>
@@ -181,46 +201,41 @@
           </div>
           <div class="shield-callout">
             <div class="shield-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
               </svg>
             </div>
             <div>
-              <strong>On-Device Visual Shield Active</strong>
-              <p>Facial features and avatars are blurred locally via canvas filters before visual context reaches upstream VLMs.</p>
+              <strong>PRAHARI Visual Shield Active</strong>
+              <p>Facial profile pixels are automatically obfuscated on-device before any telemetry packets leave this browser.</p>
             </div>
           </div>
         </div>
 
-        <!-- System Architecture Status -->
+        <!-- Satellite Telemetry Status Card -->
         <div class="card status-card">
           <div class="card-header">
-            <h3>Active Satellite Ground Links</h3>
+            <h3>Active Satellite Telemetry Feeds</h3>
           </div>
           <ul class="satellite-list">
             <li>
               <div class="sat-info">
-                <svg class="sat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
+                <span class="feed-dot"></span>
                 <span class="sat-name">Oceansat-3 (EOS-06)</span>
               </div>
               <span class="badge-active">Online</span>
             </li>
             <li>
               <div class="sat-info">
-                <svg class="sat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
+                <span class="feed-dot"></span>
                 <span class="sat-name">Cartosat-3 (High-Res)</span>
               </div>
               <span class="badge-active">Online</span>
             </li>
             <li>
               <div class="sat-info">
-                <svg class="sat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
+                <span class="feed-dot"></span>
                 <span class="sat-name">RISAT-1A (Radar)</span>
               </div>
               <span class="badge-active">Online</span>

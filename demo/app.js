@@ -1,26 +1,48 @@
-// Theme Management (Light / Dark Mode)
-function initTheme() {
-  const savedTheme = localStorage.getItem('prahari_demo_theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
+// ==========================================================================
+// Theme Management Engine (Light & Dark Mode)
+// ==========================================================================
+
+function getCurrentTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+
+function updateThemeLabel(theme) {
+  const label = document.getElementById('theme-text-label');
+  if (label) {
+    label.innerText = theme === 'dark' ? 'Dark' : 'Light';
   }
 }
 
-function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('prahari_demo_theme', newTheme);
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('prahari_demo_theme', theme);
+  updateThemeLabel(theme);
 }
 
-// Initialize theme on script load
-initTheme();
+function toggleTheme() {
+  const current = getCurrentTheme();
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+}
 
-// Form Actions
+// Attach event listeners as soon as DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleTheme();
+    });
+  }
+
+  // Update initial label
+  updateThemeLabel(getCurrentTheme());
+});
+
+// ==========================================================================
+// KYC Registration Form Actions
+// ==========================================================================
+
 function prefillDummyData() {
   document.getElementById('fullname').value = 'Dr. Vikram Sarabhai';
   document.getElementById('email').value = 'vikram.s@isro.gov.in';
@@ -43,6 +65,7 @@ function handleFormSubmit(e) {
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.innerText = msg;
   toast.classList.remove('hidden');
   setTimeout(() => {
